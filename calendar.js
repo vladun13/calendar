@@ -18,15 +18,15 @@ function createCalendar() {
 	var maxDays = 30;
 	for (var i = 1; i <= maxDays; i++) {
 		var dayTag = createDayTag(i);
+		calendar.append(dayTag)
 		if (i === todayDate) {
 			dayTag.classList.add('today')
 		};
+	}
 		if (dayTag < today.getTime()) {
 		  dayTag.classList.add('dateDisabled')
 		};
-	}
 		dayTag.addEventListener('click', clickDay);
-		calendar.append(dayTag)
 	calendar.prepend(showWeekDays(today));
 	calendar.prepend(createMonthYearTag(findCurMonth(today)));
 
@@ -38,7 +38,8 @@ function clickDay(event) {
 	var dates = document.querySelectorAll('.day');
 	for (var i = 0; i < dates.length; i++) {
 		dates[i].classList.remove('clickday');
-	event.target.classList.add('clickday');
+}
+		event.target.classList.add('clickday');
 }
 
 
@@ -105,4 +106,4 @@ function showWeekDays(today) {
 	
 	return daysNameContainer;
 }
-}
+

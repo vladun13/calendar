@@ -1,35 +1,45 @@
+var today = new Date();
 document.querySelector('#show_calendar')
 	.addEventListener('click', function () {
 		if (document.querySelector('#calendar')) {
 			document.querySelector('#calendar').remove();
 		} else {
-			createCalendar()
+			createCalendar(today.getMonth())
 		}
 	})
 
-var today = new Date();
 
-function createCalendar() {
+function createCalendar(monthIndex) {
 	var calendar = document.createElement('div');
 	calendar.id = 'calendar';
 	var todayDate = today.getDate();
-
-
-	var maxDays = 30;
-	for (var i = 1; i <= maxDays; i++) {
-		var dayTag = createDayTag(i);
+	var totalDays = function (monthIndex, year) {
+		return new Date(year, monthIndex, 0).getDate();
+	}
+	function firstDay(monthIndex, year) {
+		return new Date(year, monthIndex, 1);
+	}
+	for (var i = 0; i < firstDay(monthIndex, today.getFullYear()).getDay(); i++) {
+		var dayTag = createDayTag();
 		calendar.append(dayTag)
-		if (i === todayDate) {
+	}
+
+	for (var i = 1; i <= totalDays(monthIndex+1, today.getFullYear()); i++) {
+		var dayTag = createDayTag(i);
+		if (i === todayDate && monthIndex === today.getMonth()) {
 			dayTag.classList.add('today')
 		};
-	}
-		if (dayTag < today.getTime()) {
+		if (monthIndex < today.getMonth() || Number(dayTag.textContent) < today.getDate()) {
 		  dayTag.classList.add('dateDisabled')
-		};
-		dayTag.addEventListener('click', clickDay);
+		} 
+		else {
+			dayTag.addEventListener('click', clickDay);
+		}
+		calendar.append(dayTag)
+	}
 	calendar.prepend(showWeekDays(today));
-	calendar.prepend(createMonthYearTag(findCurMonth(today)));
-
+	calendar.prepend(createMonthYearTag(findCurMonth(monthIndex), monthIndex));
+	
 	document.body.append(calendar);
 }
 
@@ -63,14 +73,14 @@ function createDayTag(day) {
 }
 
 
-function findCurMonth(today) {
+function findCurMonth(monthIndex) {
 	var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-	var currentMonth = months[today.getMonth()];
+	var currentMonth = months[monthIndex];
 	return currentMonth;
 }
 
 
-function createMonthYearTag(currentMonth) {
+function createMonthYearTag(currentMonth, monthIndex) {
 	var monthYearDate = document.createElement('div');
 	monthYearDate.id = 'date';
 	var month = document.createElement('span');
@@ -80,14 +90,29 @@ function createMonthYearTag(currentMonth) {
 	var year = document.createElement('span');
 	year.id = 'year';
 	year.textContent = today.getFullYear();
-	var arrow1 = document.getElementById('arrPrev');
-	var arrow2 = document.getElementById('arrNext');
-	monthYearDate.append(arrow1, arrow2);
+	var arrowSVG = '<svg height="24" version="1.1" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg>';
+	var arrowLeft = document.createElement('button');
+	arrowLeft.innerHTML = arrowSVG;
+	arrowLeft.id = 'arrPrev';
+	arrowLeft.addEventListener('click', function () {
+		document.querySelector('#calendar').remove();	
+		createCalendar(monthIndex - 1);
+	});
+	var arrowRight = document.createElement('button');
+	arrowRight.innerHTML = arrowSVG;
+	arrowRight.id = 'arrNext';
+	arrowRight.addEventListener('click', function () {
+		document.querySelector('#calendar').remove();	
+		createCalendar(monthIndex + 1);
+	});
+	monthYearDate.append(arrowLeft, arrowRight);
 	monthYearDate.append(month);
 	monthYearDate.append(space);
 	monthYearDate.append(year);
 	return monthYearDate;
 }
+
+
 
 function showWeekDays(today) {
 	var daysNameContainer = document.createElement('div');

@@ -60,14 +60,19 @@ body {
 	cursor: not-allowed;
 }
 
+#arrPrev, #arrNext {
+	fill: #0A9297;
+	background: none;
+	border: 0;
+}
+
 #arrPrev {
 	float: left;
-	color: #0A9297;
 }
 
 #arrNext {
 	float: right;
-	color: #0A9297;
+	transform: rotate(180deg);
 }
 
 #daysName {

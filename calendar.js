@@ -29,9 +29,9 @@ function createCalendar(monthIndex) {
 		if (i === todayDate && monthIndex === today.getMonth()) {
 			dayTag.classList.add('today')
 		};
-		if (monthIndex < today.getMonth() || Number(dayTag.textContent) < today.getDate()) {
+		if (monthIndex < today.getMonth() || (monthIndex === today.getMonth() && Number(dayTag.textContent) < today.getDate())) {
 		  dayTag.classList.add('dateDisabled')
-		} 
+		}
 		else {
 			dayTag.addEventListener('click', clickDay);
 		}
@@ -48,8 +48,13 @@ function clickDay(event) {
 	var dates = document.querySelectorAll('.day');
 	for (var i = 0; i < dates.length; i++) {
 		dates[i].classList.remove('clickday');
+	// if (dates[i].classList === ('clickday')) {
+	// 	var choosedDate = createDayTag();
+	// 	choosedDate.textContent = 'Choosen date is ' + (today.getMonth()+1) + '-' + today.getDate() + '-' + today.getFullYear();
+	// }
 }
 		event.target.classList.add('clickday');
+		// return choosedDate;
 }
 
 

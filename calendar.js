@@ -3,6 +3,7 @@ document.querySelector('#show_calendar')
 	.addEventListener('click', function () {
 		if (document.querySelector('#calendar')) {
 			document.querySelector('#calendar').remove();
+			document.getElementById("selectedDate").remove();
 		} else {
 			createCalendar(today.getMonth())
 		}
@@ -33,7 +34,9 @@ function createCalendar(monthIndex) {
 		  dayTag.classList.add('dateDisabled')
 		}
 		else {
-			dayTag.addEventListener('click', clickDay);
+			dayTag.addEventListener('click', function (event) {
+				clickDay(event, monthIndex)
+			});
 		}
 		calendar.append(dayTag)
 	}
@@ -44,18 +47,20 @@ function createCalendar(monthIndex) {
 }
 
 
-function clickDay(event) {
+function clickDay(event, monthIndex) {
 	var dates = document.querySelectorAll('.day');
 	for (var i = 0; i < dates.length; i++) {
 		dates[i].classList.remove('clickday');
-	// if (dates[i].classList === ('clickday')) {
-	// 	var choosedDate = createDayTag();
-	// 	choosedDate.textContent = 'Choosen date is ' + (today.getMonth()+1) + '-' + today.getDate() + '-' + today.getFullYear();
-	// }
+	}
+	event.target.classList.add('clickday');
+	var choosedDate = createDayTag('Choosen date is ' + event.target.textContent + '-' + (monthIndex + 1) + '-' + today.getFullYear());
+	choosedDate.id = 'selectedDate';
+	if (document.getElementById("selectedDate")) {
+            document.getElementById("selectedDate").remove();
+	}
+	document.body.append(choosedDate);
 }
-		event.target.classList.add('clickday');
-		// return choosedDate;
-}
+
 
 
 

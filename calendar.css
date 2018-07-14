@@ -95,3 +95,8 @@ body {
     transform: translateY(2px);
 }
 
+#selectedDate {
+	border: 1px solid black;
+	width: 150px;
+	height: 100px;
+}
